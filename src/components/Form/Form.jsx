@@ -1,83 +1,83 @@
-import { Component } from 'react';
+import { addContact } from 'redux/contacts/contacts-slice';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types'
-import styles from '../Form/Form.module.css'
-import { addUser } from 'redux/contacts/contactsActions';
-import {connect} from 'react-redux'
-export class Form extends Component {
-  static propTypes={
-    addContactsData: PropTypes.func.isRequired,
-  }
-  state = {
-    name: '',
-    number: '',
-  }
+import styles from '../Form/Form.module.css';
+import { useState } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
+export const Form = () => {
+ 
+  const contacts = useSelector(state => state.contacts.contacts);
+  const dispatch = useDispatch();
+  const [name, setName] = useState('');
+  const [number, setnumber] = useState('');
 
-  onChange = ({ target: { name, value } }) => {
-    
-    this.setState({
-      [name]: value,
-    });
+  const onChange = ({ target: { name, value } }) => {
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setnumber(value);
+        break;
+      default:
+        return '';
+    }
   };
 
-  onSubmit=evt=>{
+  const onSubmit = evt => {
     evt.preventDefault();
+
+    const isHere = contacts.some(el => el.name === name);
+
+    if (isHere) {
+      alert('have');
+      return;
+    }
     let id = nanoid();
-    const isHere = this.props.items.some(({name})=>name ===evt.target.name)
-    
-    // const contact = { ...this.state, id };
-    this.props.addContactsData({...this.state, id: nanoid() });
 
-    this.setState({
-      name: '',
-      number: '',
-    })
-    
-  }
+    dispatch(addContact({ name, number, id }));
 
-  render() {
-    const{name, number}=this.state
-    return (
-      <form className={styles.form} onSubmit={this.onSubmit}>
-        <label className={styles.label}>
-          Name
-          <input
+    setName('');
+    setnumber('');
+  };
+
+  return (
+    <form className={styles.form} onSubmit={onSubmit}>
+      <label className={styles.label}>
+        Name
+        <input
           value={name}
-            className={styles.input}
-            type="text"
-            name="name"
-            required
-            onChange={this.onChange}
-          />
-        </label>
-        <label
-        className={styles.label}>
-        
-          Number
-          <input
+          className={styles.input}
+          type="text"
+          name="name"
+          required
+          onChange={onChange}
+        />
+      </label>
+      <label className={styles.label}>
+        Number
+        <input
           className={styles.input_last}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            type="tel"
-            name="number"
-            value={number}
-            required
-            onChange={this.onChange}
-          />
-        </label>
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          type="tel"
+          name="number"
+          value={number}
+          required
+          onChange={onChange}
+        />
+      </label>
 
-        <button type="submit">Add contact</button>
-      </form>
-    );
-  }
-}
-const mapStateToProps=({state})=>{
-const{items}=state.contacts
-return {items}
-}
+      <button type="submit">Add contact</button>
+    </form>
+  );
+};
 
+const mapStateToProps = ({ state }) => {
+  const { items } = state.contacts;
+  return { items };
+};
 
-const mapDispatchToProps=(dispatch)=>({
-  addContactsData: user=> dispatch(addUser(user))
-})
+const mapDispatchToProps = dispatch => ({
+  addContactsData: user => dispatch(this.props.addContactsData(user)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form)
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
