@@ -2,7 +2,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 import {
-
     persistStore,
     persistReducer,
     FLUSH,
@@ -23,7 +22,7 @@ const persistConfig = {
 
 const store = configureStore({
     reducer: {
-        contacts: persistReducer(persistConfig, rootReducer),
+        contacts: persistReducer(persistConfig, rootReducer), //оборачиваем редюсер для свзки со стораджем
     },
     middleware: getDefaultMiddleware({
         serializableCheck: {
@@ -33,5 +32,5 @@ const store = configureStore({
 });
 
 const persistor = persistStore(store);
-export { store, persistor };
+export { store, persistor }//почему мы експортим персистор но не принимаем нигде?????????????????
 

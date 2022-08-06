@@ -70,14 +70,3 @@ export const Form = () => {
     </form>
   );
 };
-
-const mapStateToProps = ({ state }) => {
-  const { items } = state.contacts;
-  return { items };
-};
-
-const mapDispatchToProps = dispatch => ({
-  addContactsData: user => dispatch(this.props.addContactsData(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Form);

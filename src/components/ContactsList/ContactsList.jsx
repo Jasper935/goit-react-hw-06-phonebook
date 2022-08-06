@@ -2,16 +2,16 @@ import { ContactsItem } from 'components/ContactsItem/ContactsItem';
 
 import { deleteContact } from 'redux/contacts/contacts-slice';
 import { useDispatch, useSelector } from 'react-redux';
-export const ContactsList = ({ onDelete }) => {
+export const ContactsList = () => {
+  
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filter);
 
-  onDelete = id => {
+
+  const onDelete = id => {
     dispatch(deleteContact(id));
   };
-
-  const contacts = useSelector(state => state.contacts.contacts);
-
-  const filter = useSelector(state => state.contacts.filter);
 
   const filterContacts = () => {
     return contacts.filter(el =>

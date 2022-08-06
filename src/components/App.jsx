@@ -5,20 +5,11 @@ import { Section } from './Section/Section';
 
 import { ContactsList } from './ContactsList/ContactsList';
 export class App extends Component {
-  onChangeFilter = ({ target: { value } }) => {
-    this.setState({
-      filter: value,
-    });
-  };
-
   render() {
     return (
       <>
         <Section title={'PhoneBook'}>
-          <Form
-            addContactsData={this.addContactsData}
-            onChangeFilter={this.onChangeFilter}
-          />
+          <Form />
         </Section>
         <Section title={'Contacts'}>
           <Filter />
